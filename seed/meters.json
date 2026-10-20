@@ -1,0 +1,98 @@
+[
+  {
+    "meter_id": "MTR-1001",
+    "member_id": "VLT-0101",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-03-14",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1002",
+    "member_id": "VLT-0101",
+    "fuel": "gas",
+    "unit": "m3",
+    "installed_on": "2025-03-14",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1003",
+    "member_id": "VLT-0102",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2024-11-02",
+    "public": true
+  },
+  {
+    "meter_id": "MTR-1004",
+    "member_id": "VLT-0104",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-01-20",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1005",
+    "member_id": "VLT-0103",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2026-07-19",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1006",
+    "member_id": "VLT-0103",
+    "fuel": "gas",
+    "unit": "m3",
+    "installed_on": "2025-06-30",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1007",
+    "member_id": "VLT-0105",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-09-09",
+    "public": true
+  },
+  {
+    "meter_id": "MTR-1008",
+    "member_id": "VLT-0106",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-02-11",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1009",
+    "member_id": "VLT-0107",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-05-05",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1010",
+    "member_id": "VLT-0108",
+    "fuel": "gas",
+    "unit": "m3",
+    "installed_on": "2025-07-21",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1011",
+    "member_id": "VLT-0109",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-04-18",
+    "public": false
+  },
+  {
+    "meter_id": "MTR-1012",
+    "member_id": "VLT-0110",
+    "fuel": "electricity",
+    "unit": "kWh",
+    "installed_on": "2025-12-01",
+    "public": false
+  }
+]

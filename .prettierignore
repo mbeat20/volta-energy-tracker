@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+pnpm-lock.yaml
+
+# Generated input data — leave exactly as delivered.
+seed/
