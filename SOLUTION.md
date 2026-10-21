@@ -29,6 +29,17 @@ them and made a call.
 What was wrong with `readings.csv`, how you handled each thing, and anything you noticed but
 deliberately left alone.
 
+Firstly, there were clear visual difficulties in the data. These include: 
+ - The `verified` column has different sorts of values to denote true or false; it has booleans, it has integers: 1 for yes and 0 for no. It also has true or false, and yes or no. 
+ - There's at least two cases where there's white space surrounding a value.
+ - There are some missing values. 
+ - There's at least one case of quotes around a meter reading value, which needs to get cleaned up. 
+ - The date value isn't uniform throughout.  
+ - There are negative values in the meter readings where there shouldn't be. 
+
+On closer expection there is more wrong wioth the data than correct.
+
+
 ---
 
 ## Where I'm least confident
