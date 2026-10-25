@@ -30,15 +30,33 @@ What was wrong with `readings.csv`, how you handled each thing, and anything you
 deliberately left alone.
 
 Firstly, there were clear visual difficulties in the data. These include: 
- - The `verified` column has different sorts of values to denote true or false; it has booleans, it has integers: 1 for yes and 0 for no. It also has true or false, and yes or no. 
+ - The `verified` column has different string entries to denote true: Y, true, 1, TRUE; false: false, 0, no. 
+ (FIX)
  - There's at least two cases where there's white space surrounding a value.
+ (FIX)
  - There are some missing values. 
- - There's at least one case of quotes around a meter reading value, which needs to get cleaned up. 
+ (REJECT)
+ - There's at least one case of quotes around a meter reading value.
+ (FIX) 
  - The date value isn't uniform throughout.  
+ (FIX)
  - There are negative values in the meter readings where there shouldn't be. 
+ (REJECT)
+ - There are a few duplicate readings.
+ (REJECT)
+ - Lowercase meter IDs.
+ (FIX)
 
-On closer expection there is more wrong wioth the data than correct.
-
+On closer expection there is more wrong wioth the data than meet they eye:
+ - There are two readings from meters that do not exist in meters.json
+ (REJECT)
+ - There are meetings before the meter was installed. (MTR-1005 has readings fromt wo weeks before installation date)
+ (REJECT)
+ - There are some rows with the same ID but different values.
+ (TAKE THE LATER READING ONLY)
+ - Readings that don't fit in between the two adjacent values (RDG-4091).
+ - Reading value that doesnt follow on from the previous one (RDG-4078) - likely rollover, largest allowable inputted value likely 100000.
+ (FIX)
 
 ---
 

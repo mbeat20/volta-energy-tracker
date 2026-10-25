@@ -9,6 +9,7 @@
     "dev": "pnpm -r --parallel run dev",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter @volta/api migrate",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "format": "prettier --write .",
