@@ -11,8 +11,9 @@ export type Reading = { taken_at: string; value: string }; // as stored: 'YYYY-M
 export type Period = {
   from: string; // taken_at of the earlier reading
   to: string; // taken_at of the later reading
-  usage: number;
+  usage: number | null; // null when suspect: we can't say how much was used
   rollover: boolean; // true if the meter wrapped past METER_MAX in this period
+  suspect: boolean; // true if the reading dropped and it wasn't a rollover
 };
 
 export function usagePeriods(readings: Reading[]): Period[] {
@@ -28,10 +29,19 @@ export function usagePeriods(readings: Reading[]): Period[] {
     const prev = toHundredths(previous.value);
     const curr = toHundredths(current.value);
 
-    const rollover = curr < prev && prev >= toHundredths(String(METER_MAX - ROLLOVER_WINDOW));
+    const dropped = curr < prev;
+    const rollover = dropped && prev >= toHundredths(String(METER_MAX - ROLLOVER_WINDOW));
+    // A drop that isn't a rollover would be negative usage, which can't happen: flag it instead.
+    const suspect = dropped && !rollover;
     const usage = rollover ? toHundredths(String(METER_MAX)) - prev + curr : curr - prev;
 
-    periods.push({ from: previous.taken_at, to: current.taken_at, usage: usage / 100, rollover });
+    periods.push({
+      from: previous.taken_at,
+      to: current.taken_at,
+      usage: suspect ? null : usage / 100,
+      rollover,
+      suspect,
+    });
   }
   return periods;
 }

@@ -14,6 +14,19 @@ app.get('/health', (_req, res) => {
   res.json({ ok: true, service: 'volta-api' });
 });
 
+// Every meter, for the page's dropdown. No auth yet: anyone can see any meter.
+app.get('/meters', async (_req, res) => {
+  try {
+    const meters = await pool.query<{ id: string; fuel: string; unit: string }>(
+      'SELECT id, fuel, unit FROM meters ORDER BY id',
+    );
+    res.json(meters.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'internal error' });
+  }
+});
+
 // Usage per period for one meter. No auth, allowance or sharing rules yet.
 // Express 4 doesn't catch errors thrown in async handlers, so each one needs its own try/catch.
 app.get('/meters/:id/usage', async (req, res) => {

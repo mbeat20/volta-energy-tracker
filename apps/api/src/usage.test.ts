@@ -10,8 +10,8 @@ describe('usagePeriods', () => {
         { taken_at: '2026-07-19', value: '18461.55' },
       ]),
     ).toEqual([
-      { from: '2026-07-05', to: '2026-07-12', usage: 18.4, rollover: false },
-      { from: '2026-07-12', to: '2026-07-19', usage: 20.15, rollover: false },
+      { from: '2026-07-05', to: '2026-07-12', usage: 18.4, rollover: false, suspect: false },
+      { from: '2026-07-12', to: '2026-07-19', usage: 20.15, rollover: false, suspect: false },
     ]);
   });
 
@@ -39,15 +39,19 @@ describe('usagePeriods', () => {
         { taken_at: '2026-07-19', value: '99991.25' },
         { taken_at: '2026-07-26', value: '10.00' },
       ]),
-    ).toEqual([{ from: '2026-07-19', to: '2026-07-26', usage: 18.75, rollover: true }]);
+    ).toEqual([
+      { from: '2026-07-19', to: '2026-07-26', usage: 18.75, rollover: true, suspect: false },
+    ]);
   });
 
-  it('does not treat a drop as a rollover when the previous reading was far from the max', () => {
-    const [period] = usagePeriods([
-      { taken_at: '2026-07-19', value: '50000.00' },
-      { taken_at: '2026-07-26', value: '10.00' },
+  it('marks a drop far from the max as suspect, with no usage', () => {
+    expect(
+      usagePeriods([
+        { taken_at: '2026-07-19', value: '50000.00' },
+        { taken_at: '2026-07-26', value: '10.00' },
+      ]),
+    ).toEqual([
+      { from: '2026-07-19', to: '2026-07-26', usage: null, rollover: false, suspect: true },
     ]);
-    expect(period.rollover).toBe(false);
-    expect(period.usage).toBe(-49990);
   });
 });
