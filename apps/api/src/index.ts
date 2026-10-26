@@ -2,6 +2,7 @@ import { requireEnv } from './env';
 import cors from 'cors';
 import express from 'express';
 import { pool } from './db';
+import { withAllowance } from './allowance';
 import { usagePeriods, type Reading } from './usage';
 
 const app = express();
@@ -27,7 +28,7 @@ app.get('/meters', async (_req, res) => {
   }
 });
 
-// Usage per period for one meter. No auth, allowance or sharing rules yet.
+// Usage per period for one meter, checked against the allowance. No auth or sharing rules yet.
 // Express 4 doesn't catch errors thrown in async handlers, so each one needs its own try/catch.
 app.get('/meters/:id/usage', async (req, res) => {
   try {
@@ -47,7 +48,8 @@ app.get('/meters/:id/usage', async (req, res) => {
     );
 
     const { fuel, unit } = meter.rows[0];
-    res.json({ meter_id: req.params.id, fuel, unit, periods: usagePeriods(readings.rows) });
+    const periods = withAllowance(usagePeriods(readings.rows), fuel);
+    res.json({ meter_id: req.params.id, fuel, unit, periods });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'internal error' });

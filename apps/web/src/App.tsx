@@ -11,6 +11,9 @@ type Period = {
   usage: number | null; // null when suspect
   rollover: boolean;
   suspect: boolean;
+  usage_kwh: number | null; // usage in kWh (gas converted from m3); null when suspect
+  difference: number | null; // usage_kwh - 250; null if not checked
+  over: boolean | null; // null if not checked (longer than 7 days, or suspect)
 };
 type Usage = { meter_id: string; fuel: string; unit: string; periods: Period[] };
 
@@ -90,14 +93,20 @@ function UsageTable({ meterId }: { meterId: string }) {
   const { periods, unit } = usage.data;
   // Usage needs two readings, so a meter with zero or one reading has no periods.
   if (periods.length === 0) return <p>No usage recorded for {meterId} yet.</p>;
+  // Electricity is already in kWh, so a second kWh column would only repeat the first.
+  const showKwh = unit !== 'kWh';
 
   return (
-    <table>
+    // cellPadding is a plain HTML attribute: enough to keep columns apart without any CSS.
+    <table cellPadding={8}>
       <thead>
         <tr>
           <th>From</th>
           <th>To</th>
           <th>Usage ({unit})</th>
+          {showKwh && <th>Usage (kWh)</th>}
+          <th>vs 250 kWh</th>
+          <th>Over?</th>
         </tr>
       </thead>
       <tbody>
@@ -106,6 +115,9 @@ function UsageTable({ meterId }: { meterId: string }) {
             <td>{p.from}</td>
             <td>{p.to}</td>
             <td>{p.suspect || p.usage === null ? 'suspect reading' : p.usage.toFixed(2)}</td>
+            {showKwh && <td>{p.usage_kwh === null ? '—' : p.usage_kwh.toFixed(2)}</td>}
+            <td>{p.difference === null ? '—' : p.difference.toFixed(2)}</td>
+            <td>{p.over === null ? 'not checked' : p.over ? 'yes' : 'no'}</td>
           </tr>
         ))}
       </tbody>
