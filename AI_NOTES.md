@@ -9,8 +9,6 @@ interested in _how_ you work with it. Being straightforward here counts in your 
 
 ## Prompts worth keeping
 
-Paste a handful of the prompts that actually mattered — the ones that unlocked something, and the
-ones that sent you the wrong way. Rough and unedited is fine.
 
 ```
 load the data from seed/ into a pandas dataframe. create one   for members, meters and readings so that I can expore the     data. Dont fix or drop anything - keep it as is.
@@ -37,8 +35,8 @@ Here is the draft schema to create the tables. The file will be called 001_schem
 
   What I expected back / what I got:
 
-  I expected it to just run as I had set out, but it reviewed my choices and cam eback with potenital issues and fixes for those. It told me to use timestampz as a data type instead of date for the started_at and finished_at. It also told me to decide how id columsn get their values and suggested (id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY).
-  It also suggested I use the database to enfiroce rules, such as NOT NULL checks and other logic checks on values. 
+  I expected it to just run as I had set out, but it reviewed my choices and came back with potenital issues and fixes for those. It told me to use timestampz as a data type instead of date for the started_at and finished_at. It also told me to decide how id columsn get their values and suggested (id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY).
+  It also suggested I use the database to enforce rules, such as NOT NULL checks and other logic checks on values. 
 
   I accepted its suggestion and the SQL was implemented
 ---
@@ -58,7 +56,7 @@ The next thing to do is to load in the JSON files from seed/, members and meters
   Reject the value if it is empty,N/A,non-numeric or negative                                         
   Reject taken_at if taken_at is before the meter's installed_on date.                                
   Uppercase meter_id before the lookup.                                                               
-  value with a comma decimal is rekjected.                                                            
+  value with a comma decimal is rejected.                                                            
   Add only these rules. Write vitest tests, one per rule.
 
   What it did was fix the problems and tested it. It aslo suggested things I may have missed. such as impossible dates, 31/02/2026. I forgto to log trims and uppercasing as repairs, the agent handled that too.I didnt specify what to do with unrecognised values/date formats, so it did this: 'An unrecognised verified value or date format is rejected.' I also didnt specify on how to report errors with more than one problem, it decided to report just the first error that came up.
@@ -84,23 +82,42 @@ The next thing to do is to load in the JSON files from seed/, members and meters
   JSON should be returned with the meter's fuel, its unit and the usage in the periods. Dont add any  
   auth, x-member-id header, allowance check or sharing yet. 
 
+  -----------------------
+  the next thing we need to do is create the web page where a user can see their usage. to start,     
+  anyone should be able to see any meter. the page should display a dropdown of meters, which needs a 
+  GET /meters endpoint and picking the meter loads its usage.                                         
+  Show a loading state while the fetch is happening, an error if the api is down or there is an error 
+  returned and a empty state if the meter has no usage.                                               
+  Display a table of periods with from, to and the usage for the meter's unit.                        
+  for GET /meters, return the id, fuel and unit only.                                                 
+  Use whatever the template already uses to reach the API; tell me which.
+
+  --------------------------
+  I am going to define a period between a FROM and TO (one reading period). The usage should be below 
+  250kwH. A period is 7 days long. Ignore gas readiugns for now, electricity only. In usage.ts,  include difference=usage-250, and over: boolean. Ignore periods longer than 7 days. Return it in    
+  the existing GET /meters/:id/usage response. No new route.
+
 ## Something it got wrong
 
-At least one. Over several hours in an unfamiliar stack there will be something.
 
-- What it produced:
-- How I noticed:
-- What I did about it:
+- What it produced: The table columns were cramped together
+- How I noticed: I looked at the page of readings, the columns looked on top of eachother and laid out unneatly.
+- What I did about it: asked it to rename or separate the headers. It shortened them ("vs 250 kWh", "Over?") and added cellPadding={8} to the table.
 
 ---
 
 ## Something I rejected
 
-- What it suggested:
-- Why I didn't take it:
+- What it suggested: To use all of the meter's readings as one period. Its reasoning was that under that rule MTR-1003 (306.6 kWh) and MTR-1007 (336.2 kWh) are over, and MTR-1004 sits on exactly 250.0,
+which "looks like the data was built to test this".
+- Why I didn't take it: I defined a period as a week. It made more sense to me, as readings were recorded weekly; to me that is 'one period'.
 
 ---
 
 ## Where I leaned on it hardest
 
-Which parts of this codebase would you struggle to change without help?
+
+Typescript code - I am new to the language so would not be able to change much of the functions and .ts scripts without help from AI. I can follow what each function does and I understand the logic, but I'd need help actually changing the code or writing functions from scratch.
+
+The frontend code, I am more comfortable working in the backend, such as SQL and APIs over client facing code. Even though I did not write the SQL myself, I knew how to structure the tables and design the schema that made most sense to me. I am not comfortable using React and things like effects.
+
